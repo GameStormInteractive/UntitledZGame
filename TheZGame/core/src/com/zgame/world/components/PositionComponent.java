@@ -5,10 +5,14 @@ public class PositionComponent extends IComponent{
 	private int x;
 	private int y;
 	
-	public PositionComponent(Integer id, int x, int y)
+	public PositionComponent()
 	{
-		super(id, ComponentType.POSITION);
-		
+		super(ComponentType.POSITION);
+		reset();
+	}
+	
+	public void init(int x, int y)
+	{
 		this.x = x;
 		this.y = y;
 	}
@@ -24,6 +28,12 @@ public class PositionComponent extends IComponent{
 	}
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	@Override
+	public void reset() {
+		x = 0;
+		y = 0;
 	}
 	
 }

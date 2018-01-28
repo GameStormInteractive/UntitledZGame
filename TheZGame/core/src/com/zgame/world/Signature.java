@@ -20,6 +20,12 @@ public class Signature {
 		signature[cmpType.getValue()] = true;
 	}
 	
+	//Remove a component from the signature
+	public void removeComponent(ComponentType cmpType)
+	{
+		signature[cmpType.getValue()] = false;
+	}
+	
 	//Check if signature contains all the requisite components
 	public boolean contains(List<ComponentType> requiredCmps)
 	{

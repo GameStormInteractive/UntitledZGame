@@ -1,42 +1,32 @@
 package com.zgame.world;
 
-import java.util.Map;
-
-import com.zgame.world.components.IComponent;
+import com.zgame.world.components.ComponentType;
 
 public class Entity {
 
-	private Integer id;
-	private Map<Integer, IComponent> components;
+	private final Integer id;
 	private Signature signature;
+	
+	public Entity (Integer id)
+	{
+		this.id = id;
+	}
 	
 	public Integer getID()
 	{
 		return id;
 	}
 	
-	public void setID(Integer id)
-	{
-		this.id = id;
-	}
-	
 	//Add a component to the entity
-	public void addComponent(IComponent component)
+	public void addComponent(ComponentType cmpType)
 	{
-		components.put(component.getID(), component);
-		signature.addComponent(component.getType());
+		signature.addComponent(cmpType);
 	}
 	
-	public boolean removeComponent(int componentID)
+	//Remove a component from the entity
+	public void removeComponent(ComponentType cmpType)
 	{
-		if(components.remove(componentID) == null)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		signature.removeComponent(cmpType);
 	}
 	
 	public Signature getSignature()
@@ -46,9 +36,6 @@ public class Entity {
 	
 	public void reset()
 	{
-		id = -1;
-		
-		components.clear();
 		signature.reset();
 	}
 }

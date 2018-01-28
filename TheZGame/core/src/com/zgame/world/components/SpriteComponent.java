@@ -6,10 +6,14 @@ public class SpriteComponent extends IComponent{
 	
 	private Sprite sprite;
 	
-	public SpriteComponent(Integer id, Sprite sprite)
+	public SpriteComponent()
 	{
-		super(id, ComponentType.SPRITE);
-		
+		super(ComponentType.SPRITE);
+		reset();
+	}
+	
+	public void init(Sprite sprite)
+	{
 		this.sprite = sprite;
 	}
 
@@ -19,5 +23,10 @@ public class SpriteComponent extends IComponent{
 
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
+	}
+
+	@Override
+	public void reset() {
+		sprite = null;
 	}
 }

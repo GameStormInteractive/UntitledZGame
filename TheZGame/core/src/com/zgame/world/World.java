@@ -3,6 +3,7 @@ package com.zgame.world;
 import java.util.ArrayList;
 
 public class World {
+	
 	ArrayList<Zombie> zombies;
 
 	public World()
