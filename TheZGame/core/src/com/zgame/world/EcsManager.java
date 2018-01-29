@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -31,7 +33,7 @@ public class EcsManager {
 	private TextureAtlas atlas;
 	AtlasRegion zombieRegion;
 	
-	public EcsManager()
+	public EcsManager(OrthographicCamera camera)
 	{
 		//Initialize Entity array and ID tracker
 		availableIDs = new Stack<Integer>();
@@ -52,18 +54,38 @@ public class EcsManager {
 		
 		//Initialize Systems
 		systems = new ArrayList<ISystem>();
-		systems.add(new RendererSystem());
+		addSystem(new RendererSystem(this,  camera));
 		
 		//Initialize rendering data
+		atlas = new TextureAtlas(Gdx.files.internal("testtexture.atlas"));
 		zombieRegion = atlas.findRegion("TestZombie");
 	}
 	
 	
 	
-	/* ######################### *
-	 * ####### UTILITIES ####### *
-	 * ######################### */
+	/* ################################# *
+	 * ####### SYSTEM MANAGEMENT ####### *
+	 * ################################# */
 	
+	//Main update loop to perform game logic
+	public void update()
+	{
+		for(ISystem system : systems)
+		{
+			system.update();
+		}
+	}
+	
+	//Add a new system
+	private void addSystem(ISystem system)
+	{
+		systems.add(system);
+		
+		//TODO: If we ever have to dynamically add systems after startup, we would need to add logic here to have
+			//new system evaluate all existing entities to see if in needed to process any of them
+	}
+	
+	//Command all systems to evaluate a new or modified entity
 	private void systemsCheckEntity(Integer entityID)
 	{
 		//Have systems evaluate new or modified entity to see if they want to process it

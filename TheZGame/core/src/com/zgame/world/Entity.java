@@ -10,6 +10,7 @@ public class Entity {
 	public Entity (Integer id)
 	{
 		this.id = id;
+		signature = new Signature();
 	}
 	
 	public Integer getID()
