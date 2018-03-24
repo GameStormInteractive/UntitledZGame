@@ -6,7 +6,8 @@ public enum ComponentType {
 	SPRITE(2),
 	ANIMATION(3),
 	SOLIDBODY(4),
-	USERCNTL(5);
+	USERCNTL(5),
+	ZOMBIFIER(6);	//EMPTY CMP
 	
 	private int value;
 	

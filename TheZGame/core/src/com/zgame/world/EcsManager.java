@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.zgame.ui.InputManager;
 import com.zgame.world.components.ComponentType;
 import com.zgame.world.components.PositionComponent;
 import com.zgame.world.components.SpriteComponent;
@@ -18,7 +19,7 @@ import com.zgame.world.systems.RendererSystem;
 public class EcsManager {
 
 	//Entity data
-	static final int MAX_ENTITIES = 1000;
+	static final int MAX_ENTITIES = 500;
 	Stack<Integer> availableIDs;
 	Entity[] entities;
 	
@@ -33,7 +34,7 @@ public class EcsManager {
 	private TextureAtlas atlas;
 	AtlasRegion zombieRegion;
 	
-	public EcsManager(OrthographicCamera camera)
+	public EcsManager(OrthographicCamera camera, InputManager gameInputManager)
 	{
 		//Initialize Entity array and ID tracker
 		availableIDs = new Stack<Integer>();
