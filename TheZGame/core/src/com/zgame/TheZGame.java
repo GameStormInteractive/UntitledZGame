@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.zgame.ui.InputManager;
 import com.zgame.world.EcsManager;
 import com.badlogic.gdx.graphics.Color; //bjr
@@ -34,13 +35,15 @@ public class TheZGame extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(multiplexer);
 		
 		ecsManager = new EcsManager(camera, gameInputManager);
+		ecsManager.createZombie(0, 0);
 		ecsManager.createZombie(120, 220);
-		ecsManager.createZombie(300, 100);
+		ecsManager.createBullet(300, 100);
 		
 		batch = new SpriteBatch(); //bjr
 		font = new BitmapFont(); //bjr
 		font.setColor(Color.RED); //bjr
-		font.getData().setScale(2); //bjr
+		font.getData().setScale(5); //bjr
+		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear); //bjr
 		
 		//Create Systems
 	}
@@ -49,8 +52,9 @@ public class TheZGame extends ApplicationAdapter {
 	public void render () {
 		ecsManager.update();
 		
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin(); //bjr
-		font.draw(batch, "Hey Ryan!", 200, 250); //bjr
+		font.draw(batch, "Hey Ryan!", 0, 0); //bjr
 		batch.end(); //bjr
 	}
 	

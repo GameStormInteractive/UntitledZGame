@@ -33,6 +33,7 @@ public class EcsManager {
 	//Rendering data
 	private TextureAtlas atlas;
 	AtlasRegion zombieRegion;
+	AtlasRegion bulletRegion;
 	
 	public EcsManager(OrthographicCamera camera, InputManager gameInputManager)
 	{
@@ -60,6 +61,7 @@ public class EcsManager {
 		//Initialize rendering data
 		atlas = new TextureAtlas(Gdx.files.internal("testtexture.atlas"));
 		zombieRegion = atlas.findRegion("TestZombie");
+		bulletRegion = atlas.findRegion("TestBullet");
 	}
 	
 	
@@ -190,7 +192,34 @@ public class EcsManager {
 		return zombie.getID();
 	}
 	
+	//Create a bullet entity
+	public Integer createBullet(int x, int y)
+	{
+		Entity bullet = createEntity();
+		
+		if(bullet != null)
+		{
+			//Add bullet components
+			//Position
+			PositionComponent posCmp = positionCmps[bullet.getID()];
+			posCmp.init(x, y);
+			bullet.addComponent(posCmp.getType());
+			
+			//Sprite
+			SpriteComponent spriteCmp = spriteCmps[bullet.getID()];
+			spriteCmp.init(new Sprite(bulletRegion));
+			bullet.addComponent(spriteCmp.getType());
+		}
+		else
+		{
+			System.out.println("WARNING: Unable to create zombie.");
+		}
+		
+		systemsCheckEntity(bullet.getID());
+		return bullet.getID();
+	}
 	
+
 	
 	/* ############################### *
 	 * ##### COMPONENT ACCESSORS ##### *
