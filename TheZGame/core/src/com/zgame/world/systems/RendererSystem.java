@@ -68,7 +68,6 @@ public class RendererSystem implements ISystem {
 									 ecsManager.getPositionCmp(entityID).getY());
 			entitySprite.draw(batch);
 		}
-
 		batch.end();
 	}
 

@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
+import com.zgame.ui.IClickHandler;
 import com.zgame.ui.InputManager;
+import com.zgame.ui.InputState;
+import com.zgame.world.EcsManager;
 import com.zgame.world.Signature;
 import com.zgame.world.components.ComponentType;
 
 
 public class UserControlSystem implements ISystem {
+	//Reference to EcsManager
+	protected EcsManager ecsManager;
 	
 	protected InputManager inputManager;
 	
@@ -19,7 +25,11 @@ public class UserControlSystem implements ISystem {
 	
 	protected Set<Integer> controlledEntityList;
 	
-	public UserControlSystem(InputManager inputManager)
+	//Input Handling
+	ClickHandler clickHandler;
+	UUID clickCallbackId;
+	
+	public UserControlSystem(EcsManager ecsManager, InputManager inputManager)
 	{
 		this.inputManager = inputManager;
 		
@@ -30,8 +40,12 @@ public class UserControlSystem implements ISystem {
 		
 		//List for user control processing
 		userCntlCmpReqs = new ArrayList<ComponentType>();
-		userCntlCmpReqs.add(ComponentType.USERCNTL);;
+		userCntlCmpReqs.add(ComponentType.USERCNTL);
 		userCntlCmpReqs.add(ComponentType.POSITION);
+		
+		//Register for input callbacks
+		clickHandler = new ClickHandler();
+		clickCallbackId = inputManager.subscribeClick(InputState.DOWN, clickHandler);
 	}
 
 	@Override
@@ -63,5 +77,14 @@ public class UserControlSystem implements ISystem {
 	@Override
 	public void removeEntity(Integer entityID) {
 		controlledEntityList.remove(entityID);
+	}
+	
+	protected class ClickHandler implements IClickHandler 
+	{
+		@Override
+		public boolean processInput(int x, int y) {
+			System.out.println("Clicked at: " + x + ", " + y);
+			return true;
+		}
 	}
 }

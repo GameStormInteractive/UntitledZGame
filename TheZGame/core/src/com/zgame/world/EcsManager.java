@@ -15,6 +15,7 @@ import com.zgame.world.components.PositionComponent;
 import com.zgame.world.components.SpriteComponent;
 import com.zgame.world.systems.ISystem;
 import com.zgame.world.systems.RendererSystem;
+import com.zgame.world.systems.UserControlSystem;
 
 public class EcsManager {
 
@@ -57,6 +58,7 @@ public class EcsManager {
 		//Initialize Systems
 		systems = new ArrayList<ISystem>();
 		addSystem(new RendererSystem(this,  camera));
+		addSystem(new UserControlSystem(this, gameInputManager));
 		
 		//Initialize rendering data
 		atlas = new TextureAtlas(Gdx.files.internal("testtexture.atlas"));

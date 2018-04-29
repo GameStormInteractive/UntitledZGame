@@ -33,6 +33,7 @@ public class TheZGame extends ApplicationAdapter {
 		multiplexer.addProcessor(uiInputManager);
 		multiplexer.addProcessor(gameInputManager);
 		Gdx.input.setInputProcessor(multiplexer);
+		gameInputManager.activate();
 		
 		ecsManager = new EcsManager(camera, gameInputManager);
 		ecsManager.createZombie(0, 0);
