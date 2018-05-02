@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
@@ -35,7 +34,7 @@ public class InputManager extends InputAdapter implements InputProcessor{
 		active = false;
 	}
 	
-	public UUID subscribeKey(Keys key, InputState state, IKeyHandler keyHandler)
+	public UUID subscribeKey(int key, InputState state, IKeyHandler keyHandler)
 	{
 		UUID uuid = UUID.randomUUID();
 		keySubscriptions.put(uuid, new KeySubscription(key, state, keyHandler));
@@ -77,6 +76,56 @@ public class InputManager extends InputAdapter implements InputProcessor{
 	
 	//Subscribe to simple key presses/clicks up and down
 	//Subscribe to get click positions up and down
+	
+	@Override
+    public boolean keyDown (int keycode) 
+	{
+	   if(active == true)
+	   {
+		   boolean processed = false;
+		   for(KeySubscription sub : keySubscriptions.values())
+		   {
+			   if(sub.getState() == InputState.DOWN)
+			   {
+				   boolean handled = sub.getHandler().processInput();
+				   if(processed == false)
+				   {
+					   processed = handled;
+				   }
+			   }
+		   }
+		   return processed;
+	   }
+	   else
+	   {
+		   return false;
+	   }
+	}
+
+	@Override
+    public boolean keyUp (int keycode) 
+	{
+	   if(active == true)
+	   {
+		   boolean processed = false;
+		   for(KeySubscription sub : keySubscriptions.values())
+		   {
+			   if(sub.getState() == InputState.UP)
+			   {
+				   boolean handled = sub.getHandler().processInput();
+				   if(processed == false)
+				   {
+					   processed = handled;
+				   }
+			   }
+		   }
+		   return processed;
+	   }
+	   else
+	   {
+		   return false;
+	   }
+    }
 	
    @Override
    public boolean touchDown (int x, int y, int pointer, int button) {

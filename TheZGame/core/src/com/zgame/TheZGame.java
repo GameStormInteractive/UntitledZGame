@@ -6,6 +6,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.zgame.ui.InputManager;
+import com.zgame.ui.pages.GamePage;
+import com.zgame.ui.pages.UIPage;
 import com.zgame.world.EcsManager;
 import com.badlogic.gdx.graphics.Color; //bjr
 import com.badlogic.gdx.graphics.g2d.SpriteBatch; //bjr
@@ -18,6 +20,10 @@ public class TheZGame extends ApplicationAdapter {
 	InputManager gameInputManager;
 	InputManager uiInputManager;
 	EcsManager ecsManager;
+	
+	//UI Pages
+	GamePage gamePage;
+	UIPage activePage;
 	
 	private SpriteBatch batch; //bjr
 	private BitmapFont font; //bjr
@@ -33,6 +39,7 @@ public class TheZGame extends ApplicationAdapter {
 		multiplexer.addProcessor(uiInputManager);
 		multiplexer.addProcessor(gameInputManager);
 		Gdx.input.setInputProcessor(multiplexer);
+		uiInputManager.activate();
 		gameInputManager.activate();
 		
 		ecsManager = new EcsManager(camera, gameInputManager);
@@ -46,11 +53,14 @@ public class TheZGame extends ApplicationAdapter {
 		font.getData().setScale(5); //bjr
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear); //bjr
 		
-		//Create Systems
+		//Create UI Pages
+		gamePage = new GamePage(uiInputManager);
+		activePage = gamePage;
 	}
 
 	@Override
 	public void render () {
+		activePage.update();
 		ecsManager.update();
 		
 		batch.setProjectionMatrix(camera.combined);
