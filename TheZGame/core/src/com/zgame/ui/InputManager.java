@@ -85,7 +85,7 @@ public class InputManager extends InputAdapter implements InputProcessor{
 		   boolean processed = false;
 		   for(KeySubscription sub : keySubscriptions.values())
 		   {
-			   if(sub.getState() == InputState.DOWN)
+			   if((sub.getState() == InputState.DOWN) && (sub.getKey() == keycode))
 			   {
 				   boolean handled = sub.getHandler().processInput();
 				   if(processed == false)
@@ -110,7 +110,7 @@ public class InputManager extends InputAdapter implements InputProcessor{
 		   boolean processed = false;
 		   for(KeySubscription sub : keySubscriptions.values())
 		   {
-			   if(sub.getState() == InputState.UP)
+			   if((sub.getState() == InputState.UP) && (sub.getKey() == keycode))
 			   {
 				   boolean handled = sub.getHandler().processInput();
 				   if(processed == false)
