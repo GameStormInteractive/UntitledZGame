@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 
 public class InputManager extends InputAdapter implements InputProcessor{
@@ -48,7 +48,7 @@ public class InputManager extends InputAdapter implements InputProcessor{
 		return uuid;
 	}
 	
-	//Unsubscribe from key event, return true if successful, false if not subscribed
+	// Unsubscribe from key event, return true if successful, false if not subscribed
 	public boolean unsubscribeKey(UUID uuid)
 	{
 		if(keySubscriptions.remove(uuid) != null)
@@ -191,9 +191,9 @@ public class InputManager extends InputAdapter implements InputProcessor{
 	
 	
 	//Utility function to get the current cursor position regardless of clicks
-	public Vector2 getCursorPosition()
+	public Vector3 getCursorPosition()
 	{
-		return new Vector2(Gdx.input.getX(), Gdx.input.getY());
+		return new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
 	}
 
 }

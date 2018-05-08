@@ -54,7 +54,7 @@ public class TheZGame extends ApplicationAdapter {
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear); //bjr
 		
 		//Create UI Pages
-		gamePage = new GamePage(uiInputManager);
+		gamePage = new GamePage(camera, uiInputManager);
 		activePage = gamePage;
 	}
 
@@ -62,6 +62,7 @@ public class TheZGame extends ApplicationAdapter {
 	public void render () {
 		activePage.update();
 		ecsManager.update();
+		gamePage.update();
 		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin(); //bjr
