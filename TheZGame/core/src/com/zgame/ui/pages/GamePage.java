@@ -47,7 +47,7 @@ public class GamePage extends UIPage {
 		//camera.unproject(mousePosWorld); // gives world location of mouse
 		
 		int cameraMoveDelta = 20; // Distance from edge before camera starts to move
-		float moveAmount = 0.1f;
+		float moveAmount = 1.0f;
 		
 		if (mousePosWorld.x < cameraMoveDelta)
 		{
@@ -62,17 +62,18 @@ public class GamePage extends UIPage {
 		else if (mousePosWorld.y < cameraMoveDelta)
 		{
 			System.out.println("Move Up");
-			camera.translate(0.0f, -moveAmount);
+			camera.translate(0.0f, moveAmount);
 		}
 		else if (mousePosWorld.y > Gdx.graphics.getHeight() - cameraMoveDelta)
 		{
 			System.out.println("Move Down");
-			camera.translate(0.0f, moveAmount);
+			camera.translate(0.0f, -moveAmount);
 		}
 		else
 		{
 			System.out.println("Do nothing");
 		}
+		camera.update();
 		
 		System.out.println("Camera X: " + camera.position.x);
 		System.out.println("Camera Y: " + camera.position.y);
