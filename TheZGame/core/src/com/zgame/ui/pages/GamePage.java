@@ -46,8 +46,9 @@ public class GamePage extends UIPage {
 		Vector3 mousePosWorld = uiInputManager.getCursorPosition(); // gives display location of mouse
 		//camera.unproject(mousePosWorld); // gives world location of mouse
 		
+		// TODO -  Modify this so that the camera moves at a linearly increasing speed the closer the mouse gets to the edge
 		int cameraMoveDelta = 20; // Distance from edge before camera starts to move
-		float moveAmount = 0.1f;
+		float moveAmount = 0.5f;
 		
 		if (mousePosWorld.x < cameraMoveDelta)
 		{
