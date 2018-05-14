@@ -47,36 +47,65 @@ public class GamePage extends UIPage {
 		//camera.unproject(mousePosWorld); // gives world location of mouse
 		
 		// TODO -  Modify this so that the camera moves at a linearly increasing speed the closer the mouse gets to the edge
-		int cameraMoveDelta = 20; // Distance from edge before camera starts to move
-		float moveAmount = 0.5f;
-		
-		if (mousePosWorld.x < cameraMoveDelta)
-		{
-			System.out.println("Move Left");
-			camera.translate(-moveAmount, 0.0f);
-		}
-		else if (mousePosWorld.x > Gdx.graphics.getWidth() - cameraMoveDelta)
-		{
-			System.out.println("Move Right");
-			camera.translate(moveAmount, 0.0f);
-		}
-		else if (mousePosWorld.y < cameraMoveDelta)
-		{
-			System.out.println("Move Up");
-			camera.translate(0.0f, -moveAmount);
-		}
-		else if (mousePosWorld.y > Gdx.graphics.getHeight() - cameraMoveDelta)
-		{
-			System.out.println("Move Down");
-			camera.translate(0.0f, moveAmount);
-		}
-		else
-		{
-			System.out.println("Do nothing");
-		}
-		
-		System.out.println("Camera X: " + camera.position.x);
-		System.out.println("Camera Y: " + camera.position.y);
-	}
+		int cameraMoveDeltaFar = 40; // Distance from edge before camera starts to move
+		int cameraMoveDeltaClose = 30; // Distance from edge before camera starts to move faster
 
+		///////////////////////////////////////
+		// Use these to create a linear equation to  move the camera speed faster as the mouse gets closer to the edge
+		float minSpeed = 2.0f;
+		float maxSpeed = 6.0f;
+		//////////////////////////////////////
+		
+		float moveAmountX = 0.0f;
+		float moveAmountY = 0.0f;
+		
+		if (mousePosWorld.x < cameraMoveDeltaFar)
+		{
+			if (mousePosWorld.x < cameraMoveDeltaClose)
+			{
+				moveAmountX = -maxSpeed;
+			}
+			else
+			{
+				moveAmountX = -minSpeed;
+			}
+		}
+		else if (mousePosWorld.x > Gdx.graphics.getWidth() - cameraMoveDeltaFar)
+		{
+			if (mousePosWorld.x > Gdx.graphics.getWidth() - cameraMoveDeltaClose)
+			{
+				moveAmountX = maxSpeed;
+			}
+			else
+			{
+				moveAmountX = minSpeed;
+			}
+		}
+		else if (mousePosWorld.y < cameraMoveDeltaFar)
+		{
+			if (mousePosWorld.y < cameraMoveDeltaClose)
+			{
+				moveAmountY = maxSpeed;
+			}
+			else
+			{
+				moveAmountY = minSpeed;
+			}
+		}
+		else if (mousePosWorld.y > Gdx.graphics.getHeight() - cameraMoveDeltaFar)
+		{
+			if (mousePosWorld.y > Gdx.graphics.getHeight() - cameraMoveDeltaClose)
+			{
+				moveAmountY = -maxSpeed;
+			}
+			else
+			{
+				moveAmountY = -minSpeed;
+			}
+		}
+		
+		camera.translate(moveAmountX, moveAmountY);
+
+		camera.update();	
+	}
 }
