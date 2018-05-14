@@ -7,18 +7,21 @@ import java.util.UUID;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 
 
 public class InputManager extends InputAdapter implements InputProcessor{
 	
+	private OrthographicCamera camera;
 	private boolean active;
 	
 	Map<UUID, KeySubscription> keySubscriptions = new HashMap<UUID, KeySubscription>();
 	Map<UUID, ClickSubscription> clickSubscriptions = new HashMap<UUID, ClickSubscription>();
 	
-	public InputManager()
+	public InputManager(OrthographicCamera camera)
 	{
+		this.camera = camera;
 		active = false;
 	}
 	
@@ -41,10 +44,10 @@ public class InputManager extends InputAdapter implements InputProcessor{
 		return uuid;
 	}
 	
-	public UUID subscribeClick(InputState state, IClickHandler clickHandler)
+	public UUID subscribeClick(InputState state, boolean projectToWorld, IClickHandler clickHandler)
 	{
 		UUID uuid = UUID.randomUUID();
-		clickSubscriptions.put(uuid, new ClickSubscription(state, clickHandler));
+		clickSubscriptions.put(uuid, new ClickSubscription(state, projectToWorld, clickHandler));
 		return uuid;
 	}
 	
@@ -132,10 +135,16 @@ public class InputManager extends InputAdapter implements InputProcessor{
 	   if(active == true)
 	   {
 		   boolean processed = false;
+		   Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
 		   for(ClickSubscription sub : clickSubscriptions.values())
 		   {
 			   if(sub.getState() == InputState.DOWN)
 			   {
+				   if(sub.getProjecToWorld() == true)
+				   {
+					   x = (int) unprojected.x;
+					   y = (int) unprojected.y;
+				   }
 				   boolean handled = sub.getHandler().processInput(x, y);
 				   if(processed == false)
 				   {
@@ -157,10 +166,16 @@ public class InputManager extends InputAdapter implements InputProcessor{
 		   if(active == true)
 		   {
 			   boolean processed = false;
+			   Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
 			   for(ClickSubscription sub : clickSubscriptions.values())
 			   {
 				   if(sub.getState() == InputState.UP)
 				   {
+					   if(sub.getProjecToWorld() == true)
+					   {
+						   x = (int) unprojected.x;
+						   y = (int) unprojected.y;
+					   }
 					   boolean handled = sub.getHandler().processInput(x, y);
 					   if(processed == false)
 					   {

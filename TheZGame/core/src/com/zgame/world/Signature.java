@@ -33,6 +33,13 @@ public class Signature {
 		
 		for(ComponentType cmpType : requiredCmps)
 		{
+			/*System.out.print("Sig: " );
+			for(int i = 0; i < length; i++)
+			{
+				System.out.print(signature[i]);
+			}
+			System.out.print("\n");
+			System.out.println("Reqs: " + requiredCmps);*/
 			if(signature[cmpType.getValue()] == false)
 			{
 				contains = false;

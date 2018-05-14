@@ -13,20 +13,23 @@ import com.zgame.ui.InputManager;
 import com.zgame.world.components.ComponentType;
 import com.zgame.world.components.PositionComponent;
 import com.zgame.world.components.SpriteComponent;
+import com.zgame.world.components.VelocityComponent;
 import com.zgame.world.systems.ISystem;
+import com.zgame.world.systems.MoveSystem;
 import com.zgame.world.systems.RendererSystem;
 import com.zgame.world.systems.UserControlSystem;
 
 public class EcsManager {
 
 	//Entity data
-	static final int MAX_ENTITIES = 500;
+	static final int MAX_ENTITIES = 100;
 	Stack<Integer> availableIDs;
 	Entity[] entities;
 	
 	//Component data
 	PositionComponent[] positionCmps = new PositionComponent[MAX_ENTITIES];
 	SpriteComponent[] spriteCmps = new SpriteComponent[MAX_ENTITIES];
+	VelocityComponent[] velocityCmps = new VelocityComponent[MAX_ENTITIES];
 	
 	//Systems
 	List<ISystem> systems;
@@ -53,12 +56,14 @@ public class EcsManager {
 		{
 			positionCmps[i] = new PositionComponent();
 			spriteCmps[i] = new SpriteComponent();
+			velocityCmps[i] = new VelocityComponent();
 		}
 		
 		//Initialize Systems
 		systems = new ArrayList<ISystem>();
 		addSystem(new RendererSystem(this,  camera));
 		addSystem(new UserControlSystem(this, gameInputManager));
+		addSystem(new MoveSystem(this));
 		
 		//Initialize rendering data
 		atlas = new TextureAtlas(Gdx.files.internal("testtexture.atlas"));
@@ -184,6 +189,16 @@ public class EcsManager {
 			SpriteComponent spriteCmp = spriteCmps[zombie.getID()];
 			spriteCmp.init(new Sprite(zombieRegion));
 			zombie.addComponent(spriteCmp.getType());
+			
+			//Velocity
+			VelocityComponent velocityCmp = velocityCmps[zombie.getID()];
+			velocityCmp.init(0, 0);
+			zombie.addComponent(velocityCmp.getType());
+			
+			//User Control
+			zombie.addComponent(ComponentType.USERCNTL);
+			
+			System.out.println("Zombie created: " + zombie.getID() + " at " + positionCmps[zombie.getID()].getX() + ", " + positionCmps[zombie.getID()].getY());
 		}
 		else
 		{
@@ -234,6 +249,11 @@ public class EcsManager {
 	public SpriteComponent getSpriteCmp(Integer entityID)
 	{
 		return spriteCmps[entityID];
+	}
+	
+	public VelocityComponent getVelocityComponent(Integer entityID)
+	{
+		return velocityCmps[entityID];
 	}
 
 }

@@ -74,7 +74,6 @@ public class RendererSystem implements ISystem {
 	@Override
 	public boolean evaluateEntity(Integer entityID, Signature entitySig) {
 		boolean matches = false;
-		System.out.println("Checking a new entity");
 		
 		//Add entity to static sprite processing list if sig matches
 		if(entitySig.contains(spriteCmpsReqs))
@@ -100,7 +99,6 @@ public class RendererSystem implements ISystem {
 			animationEntityList.remove(entityID);
 		}
 		
-		System.out.println("Match: " + matches);
 		return matches;
 	}
 

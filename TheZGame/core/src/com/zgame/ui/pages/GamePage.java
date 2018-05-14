@@ -71,12 +71,12 @@ public class GamePage extends UIPage {
 		}
 		else
 		{
-			System.out.println("Do nothing");
+			//System.out.println("Do nothing");
 		}
 		camera.update();
 		
-		System.out.println("Camera X: " + camera.position.x);
-		System.out.println("Camera Y: " + camera.position.y);
+		//System.out.println("Camera X: " + camera.position.x);
+		//System.out.println("Camera Y: " + camera.position.y);
 	}
 
 }

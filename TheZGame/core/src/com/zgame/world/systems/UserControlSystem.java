@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.badlogic.gdx.math.Vector2;
 import com.zgame.ui.IClickHandler;
 import com.zgame.ui.InputManager;
 import com.zgame.ui.InputState;
 import com.zgame.world.EcsManager;
 import com.zgame.world.Signature;
 import com.zgame.world.components.ComponentType;
+import com.zgame.world.components.PositionComponent;
+import com.zgame.world.components.VelocityComponent;
 
 
 public class UserControlSystem implements ISystem {
@@ -31,6 +34,7 @@ public class UserControlSystem implements ISystem {
 	
 	public UserControlSystem(EcsManager ecsManager, InputManager inputManager)
 	{
+		this.ecsManager = ecsManager;
 		this.inputManager = inputManager;
 		
 		//Initialize sets of entities to be processed
@@ -42,10 +46,11 @@ public class UserControlSystem implements ISystem {
 		userCntlCmpReqs = new ArrayList<ComponentType>();
 		userCntlCmpReqs.add(ComponentType.USERCNTL);
 		userCntlCmpReqs.add(ComponentType.POSITION);
+		userCntlCmpReqs.add(ComponentType.VELOCITY);
 		
 		//Register for input callbacks
 		clickHandler = new ClickHandler();
-		clickCallbackId = inputManager.subscribeClick(InputState.DOWN, clickHandler);
+		clickCallbackId = inputManager.subscribeClick(InputState.DOWN, true, clickHandler);
 	}
 
 	@Override
@@ -56,13 +61,13 @@ public class UserControlSystem implements ISystem {
 	@Override
 	public boolean evaluateEntity(Integer entityID, Signature entitySig) {
 		boolean matches = false;
-		System.out.println("Checking a new entity");
 		
 		//Add entity to user control processing list if sig matches
 		if(entitySig.contains(userCntlCmpReqs))
 		{
 			matches = true;
 			controlledEntityList.add(entityID);
+			System.out.println("User Controlled Entity Found: " + entityID);
 		}
 		//Remove otherwise
 		else
@@ -70,7 +75,6 @@ public class UserControlSystem implements ISystem {
 			controlledEntityList.remove(entityID);
 		}
 		
-		System.out.println("Match: " + matches);
 		return matches;
 	}
 
@@ -83,6 +87,25 @@ public class UserControlSystem implements ISystem {
 	{
 		@Override
 		public boolean processInput(int x, int y) {
+			
+			//Calculate velocity to move entity toward click point and apply to entity
+			for(Integer entityID : controlledEntityList)
+			{
+				System.out.println("Entity: " + entityID);
+				PositionComponent posComp = ecsManager.getPositionCmp(entityID);
+				System.out.println("X Veloc = " + x + " - " + posComp.getX());
+				System.out.println("Y Veloc = " + y + " - " + posComp.getY());
+				Vector2 dir = new Vector2(x - posComp.getX(), y - posComp.getY());
+				dir.nor();
+				int xVeloc = (int)(10 * dir.x);
+				int yVeloc = (int)(10 * dir.y);
+				VelocityComponent velComp = ecsManager.getVelocityComponent(entityID);
+				velComp.setXVelocity(xVeloc);
+				velComp.setYVelocity(yVeloc);
+				System.out.println("Setting xVeloc: " + xVeloc);
+				System.out.println("Setting yVeloc: " + yVeloc);
+			}
+
 			System.out.println("Clicked at: " + x + ", " + y);
 			return true;
 		}

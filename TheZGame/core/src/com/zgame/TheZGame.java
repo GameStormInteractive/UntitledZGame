@@ -32,8 +32,8 @@ public class TheZGame extends ApplicationAdapter {
 	public void create () {
 		camera = new OrthographicCamera(1280, 720);
 		
-		gameInputManager = new InputManager();
-		uiInputManager = new InputManager();
+		gameInputManager = new InputManager(camera);
+		uiInputManager = new InputManager(camera);
 		
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(uiInputManager);
