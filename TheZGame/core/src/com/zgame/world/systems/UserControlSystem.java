@@ -13,6 +13,7 @@ import com.zgame.ui.InputState;
 import com.zgame.world.EcsManager;
 import com.zgame.world.Signature;
 import com.zgame.world.components.ComponentType;
+import com.zgame.world.components.DestinationComponent;
 import com.zgame.world.components.PositionComponent;
 import com.zgame.world.components.VelocityComponent;
 
@@ -86,24 +87,35 @@ public class UserControlSystem implements ISystem {
 	protected class ClickHandler implements IClickHandler 
 	{
 		@Override
-		public boolean processInput(int x, int y) {
+		public boolean processInput(float x, float y) {
 			
 			//Calculate velocity to move entity toward click point and apply to entity
 			for(Integer entityID : controlledEntityList)
 			{
 				System.out.println("Entity: " + entityID);
+				
+				//Position
 				PositionComponent posComp = ecsManager.getPositionCmp(entityID);
 				System.out.println("X Veloc = " + x + " - " + posComp.getX());
 				System.out.println("Y Veloc = " + y + " - " + posComp.getY());
 				Vector2 dir = new Vector2(x - posComp.getX(), y - posComp.getY());
 				dir.nor();
-				int xVeloc = (int)(10 * dir.x);
-				int yVeloc = (int)(10 * dir.y);
+				float xVeloc = (10.0f * dir.x);
+				float yVeloc = (10.0f * dir.y);
+				
+				//Velocity
 				VelocityComponent velComp = ecsManager.getVelocityComponent(entityID);
 				velComp.setXVelocity(xVeloc);
 				velComp.setYVelocity(yVeloc);
 				System.out.println("Setting xVeloc: " + xVeloc);
 				System.out.println("Setting yVeloc: " + yVeloc);
+				
+				//Destination
+				DestinationComponent desComp = ecsManager.getDestinationComponent(entityID);
+				desComp.setX(x);
+				desComp.setY(y);
+				System.out.println("Setting destination X: " + x);
+				System.out.println("Setting destination Y: " + y);				
 			}
 
 			System.out.println("Clicked at: " + x + ", " + y);

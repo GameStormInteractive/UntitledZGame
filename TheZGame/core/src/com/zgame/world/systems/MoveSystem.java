@@ -8,6 +8,7 @@ import java.util.Set;
 import com.zgame.world.EcsManager;
 import com.zgame.world.Signature;
 import com.zgame.world.components.ComponentType;
+import com.zgame.world.components.DestinationComponent;
 import com.zgame.world.components.PositionComponent;
 import com.zgame.world.components.VelocityComponent;
 
@@ -44,8 +45,17 @@ public class MoveSystem implements ISystem {
 		{
 			PositionComponent posComp = ecsManager.getPositionCmp(entityID);
 			VelocityComponent velComp = ecsManager.getVelocityComponent(entityID);
+			DestinationComponent desComp = ecsManager.getDestinationComponent(entityID);
 			posComp.setX(posComp.getX() + velComp.getXVelocity());
 			posComp.setY(posComp.getY() + velComp.getYVelocity());
+			
+			float stopDistance = 10.0f;
+			if ( (Math.abs(posComp.getX() - desComp.getX()) < stopDistance) &&
+				 (Math.abs(posComp.getY() - desComp.getY()) < stopDistance) )
+			{
+				velComp.setXVelocity(0.0f);
+				velComp.setYVelocity(0.0f);
+			}
 		}
 	}
 

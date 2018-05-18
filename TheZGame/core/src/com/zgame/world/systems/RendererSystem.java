@@ -64,8 +64,8 @@ public class RendererSystem implements ISystem {
 		for(Integer entityID : spriteEntityList)
 		{
 			Sprite entitySprite = ecsManager.getSpriteCmp(entityID).getSprite();
-			entitySprite.setPosition(ecsManager.getPositionCmp(entityID).getX(), 
-									 ecsManager.getPositionCmp(entityID).getY());
+			entitySprite.setPosition(ecsManager.getPositionCmp(entityID).getX() - (entitySprite.getWidth()/2), 
+									 ecsManager.getPositionCmp(entityID).getY() - (entitySprite.getHeight()/2));
 			entitySprite.draw(batch);
 		}
 		batch.end();

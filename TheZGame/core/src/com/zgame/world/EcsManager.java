@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.zgame.ui.InputManager;
 import com.zgame.world.components.ComponentType;
+import com.zgame.world.components.DestinationComponent;
 import com.zgame.world.components.PositionComponent;
 import com.zgame.world.components.SpriteComponent;
 import com.zgame.world.components.VelocityComponent;
@@ -30,6 +31,7 @@ public class EcsManager {
 	PositionComponent[] positionCmps = new PositionComponent[MAX_ENTITIES];
 	SpriteComponent[] spriteCmps = new SpriteComponent[MAX_ENTITIES];
 	VelocityComponent[] velocityCmps = new VelocityComponent[MAX_ENTITIES];
+	DestinationComponent[] destinationCmps = new DestinationComponent[MAX_ENTITIES];
 	
 	//Systems
 	List<ISystem> systems;
@@ -57,6 +59,7 @@ public class EcsManager {
 			positionCmps[i] = new PositionComponent();
 			spriteCmps[i] = new SpriteComponent();
 			velocityCmps[i] = new VelocityComponent();
+			destinationCmps[i] = new DestinationComponent();
 		}
 		
 		//Initialize Systems
@@ -173,7 +176,7 @@ public class EcsManager {
 	}
 	
 	//Create a zombie entity
-	public Integer createZombie(int x, int y)
+	public Integer createZombie(float x, float y)
 	{
 		Entity zombie = createEntity();
 		
@@ -192,8 +195,13 @@ public class EcsManager {
 			
 			//Velocity
 			VelocityComponent velocityCmp = velocityCmps[zombie.getID()];
-			velocityCmp.init(0, 0);
+			velocityCmp.init(0.0f, 0.0f);
 			zombie.addComponent(velocityCmp.getType());
+			
+			//Destination
+			DestinationComponent destinationCmp = destinationCmps[zombie.getID()];
+			destinationCmp.init(0.0f, 0.0f);
+			zombie.addComponent(destinationCmp.getType());
 			
 			//User Control
 			zombie.addComponent(ComponentType.USERCNTL);
@@ -210,7 +218,7 @@ public class EcsManager {
 	}
 	
 	//Create a bullet entity
-	public Integer createBullet(int x, int y)
+	public Integer createBullet(float x, float y)
 	{
 		Entity bullet = createEntity();
 		
@@ -254,6 +262,11 @@ public class EcsManager {
 	public VelocityComponent getVelocityComponent(Integer entityID)
 	{
 		return velocityCmps[entityID];
+	}
+	
+	public DestinationComponent getDestinationComponent(Integer entityID)
+	{
+		return destinationCmps[entityID];
 	}
 
 }

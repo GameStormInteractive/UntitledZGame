@@ -3,11 +3,12 @@ package com.zgame.world.components;
 public enum ComponentType {
 	POSITION(0),
 	VELOCITY(1),
-	SPRITE(2),
-	ANIMATION(3),
-	SOLIDBODY(4),
-	USERCNTL(5),
-	ZOMBIFIER(6);	//EMPTY CMP
+	DESTINATION(2),
+	SPRITE(3),
+	ANIMATION(4),
+	SOLIDBODY(5),
+	USERCNTL(6),
+	ZOMBIFIER(7);	//EMPTY CMP
 	
 	private int value;
 	

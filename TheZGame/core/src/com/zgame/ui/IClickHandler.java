@@ -2,6 +2,6 @@ package com.zgame.ui;
 
 public interface IClickHandler {
 
-	public boolean processInput(int x, int y);
+	public boolean processInput(float x, float y);
 	
 }

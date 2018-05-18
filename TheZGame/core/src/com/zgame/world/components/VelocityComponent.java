@@ -2,8 +2,8 @@ package com.zgame.world.components;
 
 public class VelocityComponent extends IComponent{
 
-	private int xVelocity;
-	private int yVelocity;
+	private float xVelocity;
+	private float yVelocity;
 	
 	public VelocityComponent()
 	{
@@ -11,29 +11,29 @@ public class VelocityComponent extends IComponent{
 		reset();
 	}
 	
-	public void init(int xVelocity, int yVelocity)
+	public void init(float xVelocity, float yVelocity)
 	{
 		this.xVelocity = xVelocity;
 		this.yVelocity = yVelocity;
 	}
 	
-	public int getXVelocity() {
+	public float getXVelocity() {
 		return xVelocity;
 	}
-	public void setXVelocity(int xVelocity) {
+	public void setXVelocity(float xVelocity) {
 		this.xVelocity = xVelocity;
 	}
-	public int getYVelocity() {
+	public float getYVelocity() {
 		return yVelocity;
 	}
-	public void setYVelocity(int yVelocity) {
+	public void setYVelocity(float yVelocity) {
 		this.yVelocity = yVelocity;
 	}
 
 	@Override
 	public void reset() {
-		xVelocity = 0;
-		yVelocity = 0;
+		xVelocity = 0.0f;
+		yVelocity = 0.0f;
 	}
 	
 }

@@ -43,9 +43,9 @@ public class TheZGame extends ApplicationAdapter {
 		gameInputManager.activate();
 		
 		ecsManager = new EcsManager(camera, gameInputManager);
-		ecsManager.createZombie(0, 0);
-		ecsManager.createZombie(120, 220);
-		ecsManager.createBullet(300, 100);
+		ecsManager.createZombie(0.0f, 0.0f);
+		ecsManager.createZombie(120.0f, 220.0f);
+		ecsManager.createBullet(300.0f, 100.0f);
 		
 		batch = new SpriteBatch(); //bjr
 		font = new BitmapFont(); //bjr

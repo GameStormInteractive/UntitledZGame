@@ -1,13 +1,13 @@
 package com.zgame.world.components;
 
-public class PositionComponent extends IComponent{
+public class DestinationComponent extends IComponent{
 
 	private float x;
 	private float y;
 	
-	public PositionComponent()
+	public DestinationComponent()
 	{
-		super(ComponentType.POSITION);
+		super(ComponentType.DESTINATION);
 		reset();
 	}
 	
@@ -35,4 +35,5 @@ public class PositionComponent extends IComponent{
 		x = 0.0f;
 		y = 0.0f;
 	}
+	
 }
