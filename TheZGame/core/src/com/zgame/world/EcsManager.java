@@ -39,6 +39,7 @@ public class EcsManager {
 	//Rendering data
 	private TextureAtlas atlas;
 	AtlasRegion zombieRegion;
+	public AtlasRegion zombieRegion2;
 	AtlasRegion bulletRegion;
 	
 	public EcsManager(OrthographicCamera camera, InputManager gameInputManager)
@@ -71,6 +72,7 @@ public class EcsManager {
 		//Initialize rendering data
 		atlas = new TextureAtlas(Gdx.files.internal("testtexture.atlas"));
 		zombieRegion = atlas.findRegion("TestZombie");
+		zombieRegion2 = atlas.findRegion("TestZombie2");
 		bulletRegion = atlas.findRegion("TestBullet");
 	}
 	
@@ -216,6 +218,48 @@ public class EcsManager {
 		systemsCheckEntity(zombie.getID());
 		return zombie.getID();
 	}
+	
+	//Create a zombie entity
+		public Integer createZombie(float x, float y, AtlasRegion region)
+		{
+			Entity zombie = createEntity();
+			
+			if(zombie != null)
+			{
+				//Add zombie components
+				//Position
+				PositionComponent posCmp = positionCmps[zombie.getID()];
+				posCmp.init(x, y);
+				zombie.addComponent(posCmp.getType());
+				
+				//Sprite
+				SpriteComponent spriteCmp = spriteCmps[zombie.getID()];
+				spriteCmp.init(new Sprite(region));
+				zombie.addComponent(spriteCmp.getType());
+				
+				//Velocity
+				VelocityComponent velocityCmp = velocityCmps[zombie.getID()];
+				velocityCmp.init(0.0f, 0.0f);
+				zombie.addComponent(velocityCmp.getType());
+				
+				//Destination
+				DestinationComponent destinationCmp = destinationCmps[zombie.getID()];
+				destinationCmp.init(0.0f, 0.0f);
+				zombie.addComponent(destinationCmp.getType());
+				
+				//User Control
+				zombie.addComponent(ComponentType.USERCNTL);
+				
+				System.out.println("Zombie created: " + zombie.getID() + " at " + positionCmps[zombie.getID()].getX() + ", " + positionCmps[zombie.getID()].getY());
+			}
+			else
+			{
+				System.out.println("WARNING: Unable to create zombie.");
+			}
+			
+			systemsCheckEntity(zombie.getID());
+			return zombie.getID();
+		}
 	
 	//Create a bullet entity
 	public Integer createBullet(float x, float y)

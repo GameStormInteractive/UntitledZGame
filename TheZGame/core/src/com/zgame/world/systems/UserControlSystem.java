@@ -100,8 +100,9 @@ public class UserControlSystem implements ISystem {
 				System.out.println("Y Veloc = " + y + " - " + posComp.getY());
 				Vector2 dir = new Vector2(x - posComp.getX(), y - posComp.getY());
 				dir.nor();
-				float xVeloc = (10.0f * dir.x);
-				float yVeloc = (10.0f * dir.y);
+				float moveSpeed = 2.5f;
+				float xVeloc = (moveSpeed * dir.x);
+				float yVeloc = (moveSpeed * dir.y);
 				
 				//Velocity
 				VelocityComponent velComp = ecsManager.getVelocityComponent(entityID);
