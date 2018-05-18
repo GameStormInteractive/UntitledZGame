@@ -36,6 +36,7 @@ public class MoveSystem implements ISystem {
 		moveCmpsReqs = new ArrayList<ComponentType>();
 		moveCmpsReqs.add(ComponentType.POSITION);
 		moveCmpsReqs.add(ComponentType.VELOCITY);
+		moveCmpsReqs.add(ComponentType.DESTINATION);
 		
 	}
 
