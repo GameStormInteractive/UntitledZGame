@@ -210,5 +210,4 @@ public class InputManager extends InputAdapter implements InputProcessor{
 	{
 		return new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.0f);
 	}
-
 }

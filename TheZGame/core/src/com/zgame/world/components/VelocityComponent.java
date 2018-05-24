@@ -1,14 +1,25 @@
 package com.zgame.world.components;
 
+import java.util.Random;
+
 public class VelocityComponent extends IComponent{
 
 	private float xVelocity;
 	private float yVelocity;
+	private float currentSpeed;
+	private float speedMax;
+	private float speedMin;
 	
 	public VelocityComponent()
-	{
+	{		
 		super(ComponentType.VELOCITY);
 		reset();
+		
+		Random random = new Random();
+		speedMin = 1.5f;
+		speedMax = 2.5f;
+
+		currentSpeed = (speedMax * random.nextFloat()) + speedMin;
 	}
 	
 	public void init(float xVelocity, float yVelocity)
@@ -36,4 +47,8 @@ public class VelocityComponent extends IComponent{
 		yVelocity = 0.0f;
 	}
 	
+	public float getSpeed()
+	{
+		return currentSpeed;
+	}
 }

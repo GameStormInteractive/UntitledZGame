@@ -27,8 +27,8 @@ public class GamePage extends UIPage {
 	@Override
 	public void update() 
 	{
-		// TODO Auto-generated method stub
-		updateCameraPosition();
+		// TODO - Need to find a way to check if mouse is within screen bounds
+	    updateCameraPosition();		
 	}
 	
 	protected class EscHandler implements IKeyHandler
@@ -43,8 +43,7 @@ public class GamePage extends UIPage {
 	
 	protected void updateCameraPosition()
 	{
-		Vector3 mousePosWorld = uiInputManager.getCursorPosition(); // gives display location of mouse
-		//camera.unproject(mousePosWorld); // gives world location of mouse
+		Vector3 mousePosScreen = uiInputManager.getCursorPosition(); // gives display location of mouse
 		
 		// TODO -  Modify this so that the camera moves at a linearly increasing speed the closer the mouse gets to the edge
 		int cameraMoveDeltaFar = 40; // Distance from edge before camera starts to move
@@ -59,48 +58,64 @@ public class GamePage extends UIPage {
 		float moveAmountX = 0.0f;
 		float moveAmountY = 0.0f;
 		
-		if (mousePosWorld.x < cameraMoveDeltaFar)
+		if (mousePosScreen.x < cameraMoveDeltaFar)
 		{
-			if (mousePosWorld.x < cameraMoveDeltaClose)
+			float precision = 1 - (mousePosScreen.x/cameraMoveDeltaFar);
+			
+			moveAmountX = -(precision*maxSpeed + minSpeed);
+			
+			if (mousePosScreen.x < cameraMoveDeltaClose)
 			{
-				moveAmountX = -maxSpeed;
+			//	moveAmountX = -maxSpeed;
 			}
 			else
 			{
-				moveAmountX = -minSpeed;
+			//	moveAmountX = -minSpeed;
 			}
 		}
-		else if (mousePosWorld.x > Gdx.graphics.getWidth() - cameraMoveDeltaFar)
+		else if (mousePosScreen.x > Gdx.graphics.getWidth() - cameraMoveDeltaFar)
 		{
-			if (mousePosWorld.x > Gdx.graphics.getWidth() - cameraMoveDeltaClose)
+            float precision = 1 - ((Gdx.graphics.getWidth() - mousePosScreen.x)/cameraMoveDeltaFar);
+			
+			moveAmountX = (precision*maxSpeed + minSpeed);
+			
+			if (mousePosScreen.x > Gdx.graphics.getWidth() - cameraMoveDeltaClose)
 			{
-				moveAmountX = maxSpeed;
+			//	moveAmountX = maxSpeed;
 			}
 			else
 			{
-				moveAmountX = minSpeed;
+			//	moveAmountX = minSpeed;
 			}
 		}
-		else if (mousePosWorld.y < cameraMoveDeltaFar)
+		else if (mousePosScreen.y < cameraMoveDeltaFar)
 		{
-			if (mousePosWorld.y < cameraMoveDeltaClose)
+            float precision = 1 - (mousePosScreen.y/cameraMoveDeltaFar);
+			
+			moveAmountY = (precision*maxSpeed + minSpeed);
+			
+			if (mousePosScreen.y < cameraMoveDeltaClose)
 			{
-				moveAmountY = maxSpeed;
+			//	moveAmountY = maxSpeed;
 			}
 			else
 			{
-				moveAmountY = minSpeed;
+			//	moveAmountY = minSpeed;
 			}
 		}
-		else if (mousePosWorld.y > Gdx.graphics.getHeight() - cameraMoveDeltaFar)
+		else if (mousePosScreen.y > Gdx.graphics.getHeight() - cameraMoveDeltaFar)
 		{
-			if (mousePosWorld.y > Gdx.graphics.getHeight() - cameraMoveDeltaClose)
+            float precision = 1 - ((Gdx.graphics.getHeight() - mousePosScreen.y)/cameraMoveDeltaFar);
+			
+			moveAmountY = -(precision*maxSpeed + minSpeed);
+			
+			if (mousePosScreen.y > Gdx.graphics.getHeight() - cameraMoveDeltaClose)
 			{
-				moveAmountY = -maxSpeed;
+			//	moveAmountY = -maxSpeed;
 			}
 			else
 			{
-				moveAmountY = -minSpeed;
+			//	moveAmountY = -minSpeed;
 			}
 		}
 		

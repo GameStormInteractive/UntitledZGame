@@ -12,6 +12,7 @@ public class DesktopLauncher {
 		config.width = 640;
 		config.height = 360;
 		config.resizable = false;
+		config.fullscreen = true;
 		new LwjglApplication(new TheZGame(), config);
 	}
 }
