@@ -25,7 +25,7 @@ import com.zgame.world.systems.UserControlSystem;
 public class EcsManager {
 
 	//Entity data
-	static final int MAX_ENTITIES = 100;
+	static final int MAX_ENTITIES = 1000;
 	Stack<Integer> availableIDs;
 	Entity[] entities;
 

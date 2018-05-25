@@ -43,10 +43,24 @@ public class TheZGame extends ApplicationAdapter {
 		gameInputManager.activate();
 		
 		ecsManager = new EcsManager(camera, gameInputManager);
-		ecsManager.createZombie(0.0f, 0.0f, ecsManager.zombieRegion2);
-		ecsManager.createZombie(120.0f, 220.0f, ecsManager.zombieRegion2);
-		ecsManager.createZombie(-200.0f, 100.0f, ecsManager.zombieRegion2);
-		ecsManager.createBullet(300.0f, 100.0f);
+		float maxRows = 10.0f;
+		float maxCols = 10.0f;
+		float width = 128.0f;
+		float height = 128.0f;
+		float startX = 0.0f - (maxCols/2)*width;
+		float startY = 0.0f - (maxRows/2)*height;
+		
+		for (int i = 0; i < maxRows; i++)
+		{
+			for (int j = 0; j < maxCols; j++)
+			{
+				ecsManager.createZombie(startX + (j*width), startY + (i * height), ecsManager.zombieRegion2);
+			}
+		}
+		//ecsManager.createZombie(0.0f, 0.0f, ecsManager.zombieRegion2);
+		//ecsManager.createZombie(120.0f, 220.0f, ecsManager.zombieRegion2);
+		//ecsManager.createZombie(-200.0f, 100.0f, ecsManager.zombieRegion2);
+		//ecsManager.createBullet(300.0f, 100.0f);
 		
 		batch = new SpriteBatch(); //bjr
 		font = new BitmapFont(); //bjr
