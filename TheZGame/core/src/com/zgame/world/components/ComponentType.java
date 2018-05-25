@@ -4,11 +4,12 @@ public enum ComponentType {
 	POSITION(0),
 	VELOCITY(1),
 	DESTINATION(2),
-	SPRITE(3),
-	ANIMATION(4),
-	SOLIDBODY(5),
-	USERCNTL(6),
-	ZOMBIFIER(7);	//EMPTY CMP
+	COLLISION(3),
+	SPRITE(4),
+	ANIMATION(5),
+	SOLIDBODY(6),
+	USERCNTL(7),
+	ZOMBIFIER(8);	//EMPTY CMP
 	
 	private int value;
 	

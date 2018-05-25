@@ -63,11 +63,6 @@ public class TheZGame extends ApplicationAdapter {
 	public void render () {
 		activePage.update();
 		ecsManager.update();
-		
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin(); //bjr
-		font.draw(batch, "Hey Ryan!", 0, 0); //bjr
-		batch.end(); //bjr
 	}
 	
 	@Override

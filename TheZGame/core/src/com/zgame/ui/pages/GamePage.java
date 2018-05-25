@@ -21,14 +21,14 @@ public class GamePage extends UIPage {
 		
 		escHandler = new EscHandler();
 		
-		uiInputManager.subscribeKey(Keys.ESCAPE, InputState.UP, escHandler);
+		uiInputManager.subscribeKey(Keys.ESCAPE, InputState.UP, escHandler);		
 	}
 
 	@Override
 	public void update() 
 	{
 		// TODO - Need to find a way to check if mouse is within screen bounds
-	    updateCameraPosition();		
+	    updateCameraPosition();   
 	}
 	
 	protected class EscHandler implements IKeyHandler
