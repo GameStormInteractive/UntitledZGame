@@ -9,6 +9,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.zgame.ui.InputManager;
 import com.zgame.world.components.CollisionComponent;
 import com.zgame.world.components.ComponentType;
@@ -16,6 +21,7 @@ import com.zgame.world.components.DestinationComponent;
 import com.zgame.world.components.PositionComponent;
 import com.zgame.world.components.SpriteComponent;
 import com.zgame.world.components.VelocityComponent;
+import com.zgame.world.listeners.EntityContactListener;
 import com.zgame.world.systems.CollisionSystem;
 import com.zgame.world.systems.ISystem;
 import com.zgame.world.systems.MoveSystem;
@@ -24,6 +30,10 @@ import com.zgame.world.systems.UserControlSystem;
 
 public class EcsManager {
 
+	// Reference objects
+	private World world;
+	private EntityContactListener entityContactListener;
+	
 	//Entity data
 	static final int MAX_ENTITIES = 1000;
 	Stack<Integer> availableIDs;
@@ -45,8 +55,11 @@ public class EcsManager {
 	public AtlasRegion zombieRegion2;
 	AtlasRegion bulletRegion;
 
-	public EcsManager(OrthographicCamera camera, InputManager gameInputManager)
+	public EcsManager(OrthographicCamera camera, InputManager gameInputManager, World world, EntityContactListener entityContactListener)
 	{
+		this.world = world;
+		this.entityContactListener = entityContactListener;
+		
 		//Initialize Entity array and ID tracker
 		availableIDs = new Stack<Integer>();
 		entities = new Entity[MAX_ENTITIES];
@@ -192,9 +205,16 @@ public class EcsManager {
 	public Integer createZombie(float x, float y, AtlasRegion region)
 	{
 		Entity zombie = createEntity();
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+		FixtureDef fixtureDef = new FixtureDef();
+		
+		zombie.setupPhysics(bodyDef, fixtureDef);
 
 		if(zombie != null)
 		{
+			// Set up physics properties
+			
 			//Add zombie components
 			//Position
 			PositionComponent posCmp = positionCmps[zombie.getID()];

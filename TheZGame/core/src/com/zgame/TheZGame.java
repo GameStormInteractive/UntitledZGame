@@ -2,35 +2,48 @@ package com.zgame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.World;
 import com.zgame.ui.InputManager;
 import com.zgame.ui.pages.GamePage;
 import com.zgame.ui.pages.UIPage;
 import com.zgame.world.EcsManager;
-import com.badlogic.gdx.graphics.Color; //bjr
-import com.badlogic.gdx.graphics.g2d.SpriteBatch; //bjr
-import com.badlogic.gdx.graphics.g2d.BitmapFont; //bjr
-
+import com.zgame.world.listeners.EntityContactListener;
 
 public class TheZGame extends ApplicationAdapter {
-	
+	// World and camera
+	private World world;
 	private OrthographicCamera camera;
-	InputManager gameInputManager;
-	InputManager uiInputManager;
-	EcsManager ecsManager;
-	
+
+	// Physics and collision needed objects
+	private Map map;
+	private EntityContactListener entityContactListener;
+
+	// Manager objects
+	private InputManager gameInputManager;
+	private InputManager uiInputManager;
+	private EcsManager   ecsManager;
+		
 	//UI Pages
 	GamePage gamePage;
-	UIPage activePage;
+	UIPage   activePage;
 	
+	// Misc, may delete later, used for testing
 	private SpriteBatch batch; //bjr
 	private BitmapFont font; //bjr
 	
 	@Override
 	public void create () {
+		world = new World(null, false);
 		camera = new OrthographicCamera(1280, 720);
+		entityContactListener = new EntityContactListener();
 		
 		gameInputManager = new InputManager(camera);
 		uiInputManager = new InputManager(camera);
@@ -42,7 +55,7 @@ public class TheZGame extends ApplicationAdapter {
 		uiInputManager.activate();
 		gameInputManager.activate();
 		
-		ecsManager = new EcsManager(camera, gameInputManager);
+		ecsManager = new EcsManager(camera, gameInputManager, world, entityContactListener);
 		float maxRows = 10.0f;
 		float maxCols = 10.0f;
 		float width = 128.0f;
