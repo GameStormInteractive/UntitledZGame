@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.zgame.ui.InputManager;
@@ -41,7 +42,8 @@ public class TheZGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-		world = new World(null, false);
+		Vector2 gravityVec = new Vector2(1,1);
+		world = new World(gravityVec, false);
 		camera = new OrthographicCamera(1280, 720);
 		entityContactListener = new EntityContactListener();
 		
