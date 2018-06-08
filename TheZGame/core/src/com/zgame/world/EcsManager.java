@@ -9,10 +9,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.zgame.ui.InputManager;
 import com.zgame.world.components.CollisionComponent;
@@ -21,7 +22,6 @@ import com.zgame.world.components.DestinationComponent;
 import com.zgame.world.components.PositionComponent;
 import com.zgame.world.components.SpriteComponent;
 import com.zgame.world.components.VelocityComponent;
-import com.zgame.world.listeners.EntityContactListener;
 import com.zgame.world.systems.CollisionSystem;
 import com.zgame.world.systems.ISystem;
 import com.zgame.world.systems.MoveSystem;
@@ -32,7 +32,6 @@ public class EcsManager {
 
 	// Reference objects
 	private World world;
-	private EntityContactListener entityContactListener;
 	
 	//Entity data
 	static final int MAX_ENTITIES = 1000;
@@ -55,10 +54,9 @@ public class EcsManager {
 	public AtlasRegion zombieRegion2;
 	AtlasRegion bulletRegion;
 
-	public EcsManager(OrthographicCamera camera, InputManager gameInputManager, World world, EntityContactListener entityContactListener)
+	public EcsManager(OrthographicCamera camera, InputManager gameInputManager, World world)
 	{
 		this.world = world;
-		this.entityContactListener = entityContactListener;
 		
 		//Initialize Entity array and ID tracker
 		availableIDs = new Stack<Integer>();
@@ -194,6 +192,71 @@ public class EcsManager {
 		//Put entity back into unused pool
 		availableIDs.add(entityID);
 	}
+	
+	// Throwaway zombie constructor
+	public Integer createFixture(float x, float y)
+	{
+		Entity fixture = createEntity();
+
+		if(fixture != null)
+		{
+			// Set up physics properties
+			
+			//Add fixture components
+			//Sprite
+			SpriteComponent spriteCmp = spriteCmps[fixture.getID()];
+			spriteCmp.init(new Sprite(zombieRegion2));				
+			fixture.addComponent(spriteCmp.getType());
+			
+			BodyDef bd = new BodyDef();
+			bd.type = BodyType.DynamicBody;
+			bd.position.set(0,0);
+			bd.angle = 0;
+			
+			Body dynamicBody = world.createBody(bd);
+			
+			PolygonShape boxShape = new PolygonShape();
+			boxShape.setAsBox(spriteCmp.getSprite().getWidth()/2, spriteCmp.getSprite().getHeight()/2);
+			
+			FixtureDef fd = new FixtureDef();
+			fd.shape = boxShape;
+			dynamicBody.createFixture(fd);
+			
+			boxShape.dispose();
+			
+			//Position
+			PositionComponent posCmp = positionCmps[fixture.getID()];
+			posCmp.init(x, y, dynamicBody);
+			fixture.addComponent(posCmp.getType());
+
+			//Velocity
+			VelocityComponent velocityCmp = velocityCmps[fixture.getID()];
+			velocityCmp.init(0.0f, 0.0f);
+			fixture.addComponent(velocityCmp.getType());
+
+			//Destination
+			DestinationComponent destinationCmp = destinationCmps[fixture.getID()];
+			destinationCmp.init(0.0f, 0.0f);
+			fixture.addComponent(destinationCmp.getType());
+
+			//Collision
+			CollisionComponent collisionCmp = collisionCmps[fixture.getID()];	
+			collisionCmp.init(dynamicBody);
+			fixture.addComponent(collisionCmp.getType());
+
+			//User Control
+			fixture.addComponent(ComponentType.USERCNTL);
+
+			System.out.println("Zombie created: " + fixture.getID() + " at " + positionCmps[fixture.getID()].getX() + ", " + positionCmps[fixture.getID()].getY());
+		}
+		else
+		{
+			System.out.println("WARNING: Unable to create zombie.");
+		}
+
+		systemsCheckEntity(fixture.getID());
+		return fixture.getID();
+	}
 
 	//Create a zombie entity
 	public Integer createZombie(float x, float y)
@@ -205,11 +268,11 @@ public class EcsManager {
 	public Integer createZombie(float x, float y, AtlasRegion region)
 	{
 		Entity zombie = createEntity();
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DynamicBody;
-		FixtureDef fixtureDef = new FixtureDef();
+		//BodyDef bodyDef = new BodyDef();
+		//bodyDef.type = BodyType.DynamicBody;
+		//FixtureDef fixtureDef = new FixtureDef();
 		
-		zombie.setupPhysics(bodyDef, fixtureDef);
+		//zombie.setupPhysics(bodyDef, fixtureDef);
 
 		if(zombie != null)
 		{

@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.zgame.ui.InputManager;
 import com.zgame.ui.pages.GamePage;
@@ -22,6 +22,7 @@ public class TheZGame extends ApplicationAdapter {
 	// World and camera
 	private World world;
 	private OrthographicCamera camera;
+	private Box2DDebugRenderer debugDraw;
 
 	// Physics and collision needed objects
 	private Map map;
@@ -57,7 +58,7 @@ public class TheZGame extends ApplicationAdapter {
 		uiInputManager.activate();
 		gameInputManager.activate();
 		
-		ecsManager = new EcsManager(camera, gameInputManager, world, entityContactListener);
+		ecsManager = new EcsManager(camera, gameInputManager, world);
 		float maxRows = 10.0f;
 		float maxCols = 10.0f;
 		float width = 128.0f;
@@ -69,7 +70,7 @@ public class TheZGame extends ApplicationAdapter {
 		{
 			for (int j = 0; j < maxCols; j++)
 			{
-				ecsManager.createZombie(startX + (j*width), startY + (i * height), ecsManager.zombieRegion2);
+				//ecsManager.createZombie(startX + (j*width), startY + (i * height), ecsManager.zombieRegion2);
 			}
 		}
 		//ecsManager.createZombie(0.0f, 0.0f, ecsManager.zombieRegion2);
@@ -86,17 +87,45 @@ public class TheZGame extends ApplicationAdapter {
 		//Create UI Pages
 		gamePage = new GamePage(camera, uiInputManager);
 		activePage = gamePage;
+		
+		// Tutorial of using Box2D
+		debugDraw = new Box2DDebugRenderer(true, true, true, true, true, true);
+		
+		ecsManager.createFixture(-100, 0);
+		ecsManager.createFixture(100, 0);
+		
+		world.setContactListener(entityContactListener);	
 	}
 
 	@Override
 	public void render () {
 		activePage.update();
 		ecsManager.update();
+
+		stepWorld();
+		world.getContactCount();
+		world.getContactList();
+		debugDraw.render(world, camera.combined);
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose(); //bjr
 		font.dispose(); //bjr
+	}
+	
+	static final float STEP_TIME = 1f/60f;
+	float accumulator = 0;
+
+	private void stepWorld() {
+	    float delta = Gdx.graphics.getDeltaTime();
+
+	    accumulator += Math.min(delta, 0.25f);
+
+	    while (accumulator >= STEP_TIME) {
+	        accumulator -= STEP_TIME;
+
+	        world.step(STEP_TIME, 0, 0);
+	    }
 	}
 }

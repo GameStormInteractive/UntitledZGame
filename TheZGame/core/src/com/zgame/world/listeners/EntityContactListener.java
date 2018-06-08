@@ -21,14 +21,20 @@ public class EntityContactListener implements ContactListener {
 	@Override
 	public void beginContact (Contact contact)
 	{
-		
+		// We will want to keep the zombies from trampling over each other here
+		Fixture fixtureA = contact.getFixtureA();
+		Fixture fixtureB = contact.getFixtureB();
+		System.out.println("beginContact between " + fixtureA.toString() + " and " + fixtureB.toString());
 	}
 
 	/** Called when two fixtures cease to touch. */
 	@Override
 	public void endContact (Contact contact)
 	{
-		
+		// We will want to reset the route for the zombies here
+		Fixture fixtureA = contact.getFixtureA();
+		Fixture fixtureB = contact.getFixtureB();
+		System.out.println("endContact between " + fixtureA.toString() + " and " + fixtureB.toString());
 	}
 
 	/*
@@ -41,7 +47,9 @@ public class EntityContactListener implements ContactListener {
 	@Override
 	public void preSolve (Contact contact, Manifold oldManifold)
 	{
-		
+		Fixture fixtureA = contact.getFixtureA();
+		Fixture fixtureB = contact.getFixtureB();
+		System.out.println("preSolve between " + fixtureA.toString() + " and " + fixtureB.toString());
 	}
 
 	/*
@@ -53,6 +61,8 @@ public class EntityContactListener implements ContactListener {
 	@Override
 	public void postSolve (Contact contact, ContactImpulse impulse)
 	{
-		
+		Fixture fixtureA = contact.getFixtureA();
+		Fixture fixtureB = contact.getFixtureB();
+		System.out.println("postSolve between " + fixtureA.toString() + " and " + fixtureB.toString());
 	}
 }
