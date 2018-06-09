@@ -2,6 +2,8 @@ package com.zgame.world.components;
 
 import java.util.Random;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class VelocityComponent extends IComponent{
 
 	private float xVelocity;
@@ -39,6 +41,17 @@ public class VelocityComponent extends IComponent{
 	}
 	public void setYVelocity(float yVelocity) {
 		this.yVelocity = yVelocity;
+	}
+	
+	public Vector2 getVelocity()
+	{
+		return new Vector2(xVelocity,yVelocity);
+	}
+	
+	public void setVelocity(Vector2 velocity)
+	{
+		xVelocity = velocity.x;
+		yVelocity = velocity.y;
 	}
 
 	@Override

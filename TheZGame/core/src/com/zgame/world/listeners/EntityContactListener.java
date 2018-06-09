@@ -5,16 +5,21 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.zgame.world.EcsManager;
+import com.zgame.world.Entity;
+import com.zgame.world.components.VelocityComponent;
 
 public class EntityContactListener implements ContactListener {
 	
 	private Fixture fixtureA;
 	private Fixture fixtureB;
+	private EcsManager ecsManager;
 	
-	public EntityContactListener()
+	public EntityContactListener(EcsManager ecsManager)
 	{
 		fixtureA = null;
 		fixtureB = null;
+		this.ecsManager = ecsManager;
 	}
 	
 	/** Called when two fixtures begin to touch. */
@@ -25,6 +30,24 @@ public class EntityContactListener implements ContactListener {
 		Fixture fixtureA = contact.getFixtureA();
 		Fixture fixtureB = contact.getFixtureB();
 		System.out.println("beginContact between " + fixtureA.toString() + " and " + fixtureB.toString());
+
+		int fixtureAIdent = ((Entity)fixtureA.getBody().getUserData()).getID();
+		int fixtureBIdent = ((Entity)fixtureB.getBody().getUserData()).getID();
+		
+		VelocityComponent velA = ecsManager.getVelocityComponent(fixtureAIdent);
+		VelocityComponent velB = ecsManager.getVelocityComponent(fixtureBIdent);
+
+		// Prevent jam ups
+		if (velA.getSpeed() > velB.getSpeed())
+		{
+			velA.setXVelocity(-(velA.getXVelocity()));
+			velA.setYVelocity(-(velA.getYVelocity()));
+		}
+		else
+		{
+			velB.setXVelocity(-(velB.getXVelocity()));
+			velB.setYVelocity(-(velB.getYVelocity()));
+		}
 	}
 
 	/** Called when two fixtures cease to touch. */
@@ -35,6 +58,20 @@ public class EntityContactListener implements ContactListener {
 		Fixture fixtureA = contact.getFixtureA();
 		Fixture fixtureB = contact.getFixtureB();
 		System.out.println("endContact between " + fixtureA.toString() + " and " + fixtureB.toString());
+		
+		int fixtureAIdent = ((Entity)fixtureA.getBody().getUserData()).getID();
+		int fixtureBIdent = ((Entity)fixtureB.getBody().getUserData()).getID();
+		
+		VelocityComponent velA = ecsManager.getVelocityComponent(fixtureAIdent);
+		VelocityComponent velB = ecsManager.getVelocityComponent(fixtureBIdent);
+
+		//velA.setXVelocity(0);
+		//velA.setYVelocity(0);
+		
+		//velB.setXVelocity(0);
+		//velB.setYVelocity(0);
+		
+		// Reroute from here
 	}
 
 	/*
@@ -50,6 +87,8 @@ public class EntityContactListener implements ContactListener {
 		Fixture fixtureA = contact.getFixtureA();
 		Fixture fixtureB = contact.getFixtureB();
 		System.out.println("preSolve between " + fixtureA.toString() + " and " + fixtureB.toString());
+		
+		
 	}
 
 	/*
@@ -64,5 +103,6 @@ public class EntityContactListener implements ContactListener {
 		Fixture fixtureA = contact.getFixtureA();
 		Fixture fixtureB = contact.getFixtureB();
 		System.out.println("postSolve between " + fixtureA.toString() + " and " + fixtureB.toString());
+		
 	}
 }

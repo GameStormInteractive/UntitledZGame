@@ -46,7 +46,6 @@ public class TheZGame extends ApplicationAdapter {
 		Vector2 gravityVec = new Vector2(1,1);
 		world = new World(gravityVec, false);
 		camera = new OrthographicCamera(1280, 720);
-		entityContactListener = new EntityContactListener();
 		
 		gameInputManager = new InputManager(camera);
 		uiInputManager = new InputManager(camera);
@@ -59,6 +58,8 @@ public class TheZGame extends ApplicationAdapter {
 		gameInputManager.activate();
 		
 		ecsManager = new EcsManager(camera, gameInputManager, world);
+		
+		entityContactListener = new EntityContactListener( ecsManager );
 		float maxRows = 10.0f;
 		float maxCols = 10.0f;
 		float width = 128.0f;
